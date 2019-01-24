@@ -11,21 +11,13 @@ import SingleArticle from "./components/SingleArticle";
 
 import * as serviceWorker from './serviceWorker';
 
-const Home = () => {
-    return <h1>this is Home</h1>
-}
 
-const About = () => {
-    return <h1>this is About</h1>
-}
 
 ReactDOM.render(
     <BrowserRouter>
     <div>
         <Navbar/>
         <Route exact path="/" component={Welcome} />
-        <Route path="/home" component={Home} />
-        <Route path="/about" component={About} />
         <Route path="/login" component={Login} />
         <Route path="/article/:slug" component={SingleArticle} />
         <Route path="/articles/create" component={CreateArticle} />
