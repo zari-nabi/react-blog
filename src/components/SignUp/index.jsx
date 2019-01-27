@@ -1,5 +1,7 @@
 import React from "react";
 import { validateAll } from "indicative";
+import Axios from "axios";
+import config from "../../config";
 
 class SignUp extends React.Component {
     constructor() {
@@ -39,7 +41,23 @@ class SignUp extends React.Component {
         }
 
         validateAll(data, rules, message)
-            .then(() => { console.log('success') })
+            .then(() => {
+                 Axios.post(`${config.apiUrl}/auth/register`,{
+                     name:this.state.name,
+                     email:this.state.email,
+                     password:this.state.password
+                 }).then(response =>{
+                     localStorage.setItem('user',JSON.stringify(response.data.data));
+                     this.props.history.push('/');
+                 }).catch(errors => {
+                     console.log(errors.response)
+                     const formatedErrors = {};
+                     formatedErrors['email'] = errors.response.data['email'][0];
+                     this.setState({
+                         errors:formatedErrors
+                     })
+                 })
+                })
             .catch((errors) => {
                 const formatedErrors = {};
                 errors.forEach(error => formatedErrors[error.field] = error.message);
