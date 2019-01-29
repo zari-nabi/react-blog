@@ -23,7 +23,7 @@ class SignUp extends React.Component {
         })
     }
 
-    handleSubmit(event) {
+    handleSubmit = async(event) => {
         event.preventDefault();
 
         const data = this.state;
@@ -40,33 +40,36 @@ class SignUp extends React.Component {
             'password.confirmed' : 'the password does not match'
         }
 
-        validateAll(data, rules, message)
-            .then(() => {
-                 Axios.post(`${config.apiUrl}/auth/register`,{
-                     name:this.state.name,
-                     email:this.state.email,
-                     password:this.state.password
-                 }).then(response =>{
-                     localStorage.setItem('user',JSON.stringify(response.data.data));
-                     this.props.setAuthUser(response.data.data);
-                     this.props.history.push('/');
-                 }).catch(errors => {
-                     console.log(errors.response)
-                     const formatedErrors = {};
-                     formatedErrors['email'] = errors.response.data['email'][0];
-                     this.setState({
-                         errors:formatedErrors
-                     })
-                 })
-                })
-            .catch((errors) => {
-                const formatedErrors = {};
+        try{
+            await validateAll(data, rules, message)
+
+            try{
+                  const response = await Axios.post(`${config.apiUrl}/auth/register`,{
+                    name:this.state.name,
+                    email:this.state.email,
+                    password:this.state.password
+                  })  
+                  localStorage.setItem('user',JSON.stringify(response.data.data));
+                  this.props.setAuthUser(response.data.data);
+                  this.props.history.push('/');
+
+            } catch(errors){
+                 const formatedErrors = {};
                 errors.forEach(error => formatedErrors[error.field] = error.message);
                 this.setState({
                     errors: formatedErrors
                 })
             }
-            )
+
+        } catch(errors){
+            const formatedErrors = {};
+                errors.forEach(error => formatedErrors[error.field] = error.message);
+                this.setState({
+                    errors: formatedErrors
+                })
+        }
+
+
 
     }
     render() {
