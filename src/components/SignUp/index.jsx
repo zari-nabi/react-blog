@@ -1,7 +1,5 @@
 import React from "react";
-import { validateAll } from "indicative";
-import Axios from "axios";
-import config from "../../config";
+
 
 class SignUp extends React.Component {
     constructor() {
@@ -26,47 +24,14 @@ class SignUp extends React.Component {
     handleSubmit = async(event) => {
         event.preventDefault();
 
-        const data = this.state;
-        const rules = {
-            name: 'required|string',
-            email: 'required|email',
-            password: 'required|string|min:6|confirmed'
-
-        }
-
-        const message={
-            required : 'the {{field}} is required',
-            'email.email' : 'the format is invalid',
-            'password.confirmed' : 'the password does not match'
-        }
-
         try{
-            await validateAll(data, rules, message)
-
-            try{
-                  const response = await Axios.post(`${config.apiUrl}/auth/register`,{
-                    name:this.state.name,
-                    email:this.state.email,
-                    password:this.state.password
-                  })  
-                  localStorage.setItem('user',JSON.stringify(response.data.data));
-                  this.props.setAuthUser(response.data.data);
+                const user = await this.props.registerUser(this.state);
+                  localStorage.setItem('user',JSON.stringify(user));
+                  this.props.setAuthUser(user);
                   this.props.history.push('/');
 
-            } catch(errors){
-                 const formatedErrors = {};
-                errors.forEach(error => formatedErrors[error.field] = error.message);
-                this.setState({
-                    errors: formatedErrors
-                })
-            }
-
         } catch(errors){
-            const formatedErrors = {};
-                errors.forEach(error => formatedErrors[error.field] = error.message);
-                this.setState({
-                    errors: formatedErrors
-                })
+            this.setState({errors})
         }
 
 
