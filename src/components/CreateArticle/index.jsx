@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import CreateArticleForm from './CreateArticleForm';
 
@@ -31,14 +32,25 @@ class CreateArticle extends React.Component {
     });
   }
 
+   handleSubmit =async (event) => {
+    event.preventDefault();
+    await this.props.CreateArticle(this.state);
+  }
+
   render() {
     return (
       <CreateArticleForm
         handleInputChange={this.handleInputChange}
         categories={this.state.categories}
+        handleSubmit={this.handleSubmit}
       />
     )
   }
 }
+
+CreateArticle.propTypes = {
+  getArticleCategories: PropTypes.func.isRequired,
+  createArticle: PropTypes.func.isRequired,
+};
 
 export default CreateArticle;
