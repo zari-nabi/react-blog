@@ -12,7 +12,7 @@ class CreateArticle extends React.Component {
       image: null,
       content: '',
       category: null,
-      errors: {},
+      errors: [],
       categories: [],
     }
   }
@@ -34,7 +34,13 @@ class CreateArticle extends React.Component {
 
    handleSubmit =async (event) => {
     event.preventDefault();
-    await this.props.CreateArticle(this.state);
+
+    try{
+      const article= await this.props.createArticle(this.state , this.props.token);
+      this.props.history.push('/');
+    }catch(errors){
+      this.setState({errors});
+    }
   }
 
   render() {
@@ -43,6 +49,7 @@ class CreateArticle extends React.Component {
         handleInputChange={this.handleInputChange}
         categories={this.state.categories}
         handleSubmit={this.handleSubmit}
+        errors = {this.state.errors}
       />
     )
   }
@@ -51,6 +58,7 @@ class CreateArticle extends React.Component {
 CreateArticle.propTypes = {
   getArticleCategories: PropTypes.func.isRequired,
   createArticle: PropTypes.func.isRequired,
+  token: PropTypes.string.isRequired,
 };
 
 export default CreateArticle;
