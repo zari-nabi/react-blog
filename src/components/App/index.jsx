@@ -16,6 +16,7 @@ class App extends React.Component {
 
     this.state = {
       authUser: null,
+      articles: [],
     };
   }
 
@@ -38,6 +39,12 @@ class App extends React.Component {
     });
   }
 
+  setArticles = (articles) => {
+    this.setState({
+      articles,
+    })
+  }
+
   render() {
     const { location } = this.props;
     return (
@@ -50,6 +57,7 @@ class App extends React.Component {
           render={props => (<Welcome
             {...props}
             getArticles={this.props.articlesService.getArticles}
+            setArticles={this.setArticles}
           />
           )} />
         <Route path="/login"
@@ -71,7 +79,13 @@ class App extends React.Component {
             />)
           }
         />
-        <Route path="/article/:slug" component={SingleArticle} />
+        <Route path="/article/:slug"
+          render={
+            props => (<SingleArticle
+              {...props}
+              getArticle={this.props.articlesService.getArticle}
+            />)
+          } />
         <Route
           path="/articles/create"
           render={

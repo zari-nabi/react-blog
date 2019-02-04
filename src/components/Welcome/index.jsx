@@ -20,6 +20,7 @@ class Welcome extends React.Component {
     const articles = await this.props.getArticles(url);
 
     this.setState({articles});
+    this.props.setArticles(articles.data)
   }
 
   render() {
