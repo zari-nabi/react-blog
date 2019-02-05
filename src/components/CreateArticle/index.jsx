@@ -26,7 +26,7 @@ class CreateArticle extends React.Component {
   }
 
   handleInputChange = (event) => {
-    console.log(event.target.files)
+//    console.log(event.target.files)
     this.setState({
       [event.target.name]: event.target.type === 'file' ? event.target.files[0] : event.target.value,
     });

@@ -63,20 +63,34 @@ import config from '../config';
 
 export default class ArticlesService {
 
-  async getArticles(url=`${config.apiUrl}/articles`){
+  async getUserArticles(token, url = `${config.apiUrl}/user/articles`) {
+    const response = await Axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    });
+    return response.data.data;
+  }
+
+  async getArticles(url = `${config.apiUrl}/articles`) {
     const response = await Axios.get(url);
 
     return response.data.data;
   }
 
-  async getArticle(slug){
+  async getArticle(slug) {
     const response = await Axios.get(`${config.apiUrl}/article/${slug}`);
 
     return response.data.data;
   }
 
   async getArticleCategories() {
+    const categories = JSON.parse(localStorage.getItem('categories'));
+    if (categories) {
+      return categories;
+    }
     const response = await Axios.get(`${config.apiUrl}/categories`);
+    localStorage.setItem('categories', JSON.stringify(response.data.categories));
 
     return response.data.categories;
   }
@@ -108,10 +122,10 @@ export default class ArticlesService {
         category_id: data.category,
         imageUrl: image.secure_url,
       }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
 
       return response.data;

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route } from 'react-router-dom';
 
+import Auth from '../Auth';
 import Login from '../Login';
 import Navbar from '../Navbar';
 import Signup from '../Signup';
@@ -9,6 +10,8 @@ import Footer from '../Footer';
 import Welcome from '../Welcome';
 import CreateArticle from '../CreateArticle';
 import SingleArticle from '../SingleArticle';
+import RedirectifAuth from '../RedirectifAuth';
+import UserArticle from '../UserArticles';
 
 class App extends React.Component {
   constructor() {
@@ -17,6 +20,7 @@ class App extends React.Component {
     this.state = {
       authUser: null,
       articles: [],
+      categories: [],
     };
   }
 
@@ -60,42 +64,51 @@ class App extends React.Component {
             setArticles={this.setArticles}
           />
           )} />
-        <Route path="/login"
-          render={
-            props => (<Login
-              {...props}
-              loginUser={this.props.authService.loginUser}
-              setAuthUser={this.setAuthUser}
-            />)
-          }
+        <RedirectifAuth
+          path="/login"
+          component={Login}
+          props={{
+            loginUser: this.props.authService.loginUser,
+            setAuthUser: this.setAuthUser,
+          }}
+          isAuthenticated={this.state.authUser !== null}
         />
-        <Route
+        <RedirectifAuth
           path="/signup"
-          render={
-            props => (<Signup
-              {...props}
-              registerUser={this.props.authService.registerUser}
-              setAuthUser={this.setAuthUser}
-            />)
-          }
+          component={Signup}
+          props={{
+            registerUser: this.props.authService.registerUser,
+            setAuthUser: this.setAuthUser,
+          }}
+          isAuthenticated={this.state.authUser !== null}
         />
         <Route path="/article/:slug"
           render={
             props => (<SingleArticle
               {...props}
               getArticle={this.props.articlesService.getArticle}
+              articles={this.state.articles}
             />)
           } />
-        <Route
+        <Auth
           path="/articles/create"
-          render={
-            props => (<CreateArticle
-              {...props}
-              getArticleCategories={this.props.articlesService.getArticleCategories}
-              createArticle={this.props.articlesService.createArticle}
-              token={this.state.authUser.token}
-            />)
-          }
+          componenet={CreateArticle}
+          props={{
+            getArticleCategories: this.props.articlesService.getArticleCategories,
+            createArticle: this.props.articlesService.createArticle,
+            token: this.state.authUser ? this.state.authUser.token : null,
+          }}
+          isAuthenticated={this.state.authUser !== null}
+        />
+        <Auth
+          path="/user/articles"
+          componenet={UserArticle}
+          props={{
+            getUserArticles:this.props.articlesService.getUserArticles,
+            setArticles:this.setArticles,
+            token: this.state.authUser ? this.state.authUser.token : null,
+          }}
+          isAuthenticated={this.state.authUser !== null}
         />
         {
           location.pathname !== '/login' && location.pathname !== '/signup' &&

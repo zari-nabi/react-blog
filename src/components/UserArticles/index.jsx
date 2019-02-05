@@ -2,7 +2,7 @@ import React from 'react';
 
 import Articles from './Articles';
 
-class Welcome extends React.Component {
+class UserArticle extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -11,14 +11,14 @@ class Welcome extends React.Component {
   }
 
   async componentWillMount() {
-    const articles = await this.props.getArticles();
+    const articles = await this.props.getUserArticles(this.props.token);
 
     this.setState({articles});
     this.props.setArticles(articles.data);
   }
 
   handlePagination = async (url) => {
-    const articles = await this.props.getArticles(url);
+    const articles = await this.props.getUserArticles(this.props.token,url);
 
     this.setState({articles});
     this.props.setArticles(articles.data)
@@ -38,4 +38,4 @@ class Welcome extends React.Component {
 
 
 
-export default Welcome;
+export default UserArticle;
