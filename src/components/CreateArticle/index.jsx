@@ -25,6 +25,10 @@ class CreateArticle extends React.Component {
     if(this.props.match.params.slug){
       const article = this.props.articles.find(articleInArray =>
          articleInArray.slug === this.props.match.params.slug)
+    if(!article){
+      this.props.history.push('/user/articles');
+      return;
+    }
       this.setState({
          editing:true ,
           article ,
