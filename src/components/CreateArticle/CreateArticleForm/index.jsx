@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 
 import Banner from '../../Banner';
 
-const CreateArticle = ({ handleInputChange, categories, handleSubmit, errors,editing,article,title,content,category }) => ((
+const CreateArticle = ({
+   handleInputChange, categories, handleSubmit,updateArticle, errors,editing,article,title,content,category }) => ((
   <div>
     {/* Header */}
     <Banner
@@ -23,7 +24,7 @@ const CreateArticle = ({ handleInputChange, categories, handleSubmit, errors,edi
                 }
               </ul>
 
-              <form className="p-30 bg-gray rounded" onSubmit={handleSubmit}>
+              <form className="p-30 bg-gray rounded" onSubmit={editing ? updateArticle: handleSubmit}>
                 <div className="row">
                   <div className="form-group col-md-12 my-5">
                     <input type="file" className="form-control" onChange={handleInputChange} name="image" />
@@ -57,7 +58,9 @@ const CreateArticle = ({ handleInputChange, categories, handleSubmit, errors,edi
                   />
                 </div>
                 <div className="text-center">
-                  <button className="btn btn-lg btn-primary" type="submit">Create Article</button>
+                  <button className="btn btn-lg btn-primary" type="submit">
+                  {editing ? 'Update Article' : 'Create Article'}
+                  </button>
                 </div>
               </form>
             </div>

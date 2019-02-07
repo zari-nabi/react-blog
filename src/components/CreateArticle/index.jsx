@@ -60,6 +60,18 @@ class CreateArticle extends React.Component {
     }
   }
 
+  updateArticle = async (event) =>{
+    event.preventDefault();
+    try{
+      await this.props.updateArticle(this.state,this.state.article,this.props.token);
+
+      this.props.history.push("/user/articles")
+    }catch(errors){
+      console.log(errors)
+      this.setState({errors})
+    }
+  }
+
   render() {
     return (
       <CreateArticleForm
@@ -72,6 +84,7 @@ class CreateArticle extends React.Component {
         title={this.state.title}
         content={this.state.content}
         category={this.state.category}
+        updateArticle={this.updateArticle}
       />
     )
   }
