@@ -59,6 +59,7 @@ class CreateArticle extends React.Component {
     try{
       const article= await this.props.createArticle(this.state , this.props.token);
       this.props.history.push('/');
+      this.props.notyService.success('Successfully Create Article !');
     }catch(errors){
       this.setState({errors});
     }
@@ -69,9 +70,10 @@ class CreateArticle extends React.Component {
     try{
       await this.props.updateArticle(this.state,this.state.article,this.props.token);
 
-      this.props.history.push("/user/articles")
+      this.props.history.push("/user/articles");
+      this.props.notyService.success('Successfully Update Article !');
     }catch(errors){
-      console.log(errors)
+      this.props.notyService.error('Somthing is wrong !');
       this.setState({errors})
     }
   }
