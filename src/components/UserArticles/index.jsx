@@ -24,6 +24,21 @@ class UserArticle extends React.Component {
     this.props.setArticles(articles.data)
   }
 
+  deleteArticle = async (id) => {
+    this.props.deleteArticle(id,this.props.token);
+
+    const articles = this.state.articles.data.filter(article => article.id !== id);
+    this.setState({
+      articles:{
+        data : articles,
+      }
+    })
+  }
+
+  editArticle = (article) =>{
+    this.props.history.push(`/article/edit/${article.slug}`);
+  }
+
   render() {
     return (
       <Articles
@@ -31,6 +46,8 @@ class UserArticle extends React.Component {
         nextUrl={this.state.articles.next_page_url}
         prevUrl={this.state.articles.prev_page_url}
         handlePagination={this.handlePagination}
+        deleteArticle = {this.deleteArticle}
+        editArticle = {this.editArticle}
       />
     )
   }

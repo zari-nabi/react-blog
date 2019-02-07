@@ -63,6 +63,16 @@ import config from '../config';
 
 export default class ArticlesService {
 
+  async deleteArticle(id,token){
+    await Axios.delete(`${config.apiUrl}/articles/${id}`,{
+      headers:{
+        Authorization:`Bearer ${token}`,
+      }
+    })
+
+    return true;
+  }
+
   async getUserArticles(token, url = `${config.apiUrl}/user/articles`) {
     const response = await Axios.get(url, {
       headers: {
@@ -131,7 +141,7 @@ export default class ArticlesService {
       return response.data;
     } catch (errors) {
       if (errors.response) {
-        return Promise.reject(errors.response.data);
+        return Promise.reject(errors.response.data.data);
       }
 
       return Promise.reject(errors);

@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 
 import Banner from '../../Banner';
 
-const CreateArticle = ({ handleInputChange, categories, handleSubmit, errors }) => ((
+const CreateArticle = ({ handleInputChange, categories, handleSubmit, errors,editing,article,title,content,category }) => ((
   <div>
     {/* Header */}
     <Banner
       backgroundImage={`url(${process.env.PUBLIC_URL}/assets/img/bg-laptop.jpg)`}
-      title="Write an article"
+      title= {editing ? `Edit Article ${article.title}` :  'Write an article'}
     />
     {/* END Header */}
     {/* Main container */}
@@ -35,10 +35,11 @@ const CreateArticle = ({ handleInputChange, categories, handleSubmit, errors }) 
                       name="title"
                       placeholder="Title"
                       onChange={handleInputChange}
+                      value = {title}
                     />
                   </div>
                   <div className="form-group col-12 col-md-6">
-                    <select name="channel" id className="form-control form-control-lg" onChange={handleInputChange}>
+                    <select name="category" value={category} id className="form-control form-control-lg" onChange={handleInputChange}>
                       <option value>Select category</option>
                       {categories.map(category => <option key={category.id} value={category.id}>{category.name}</option>)}
                     </select>
@@ -52,6 +53,7 @@ const CreateArticle = ({ handleInputChange, categories, handleSubmit, errors }) 
                     name="content"
                     defaultValue=""
                     onChange={handleInputChange}
+                    value={content}
                   />
                 </div>
                 <div className="text-center">

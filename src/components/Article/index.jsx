@@ -20,6 +20,7 @@ const Article = ({ article }) => ((
       <p className="text-center mt-40">
         <Link className="btn btn-primary btn-round" to={`article/${article.slug}`}>Read more</Link>
       </p>
+
     </div>
   </article>
 ));
