@@ -49,13 +49,18 @@ class App extends React.Component {
     })
   }
 
+  removeAuthUser =() =>{
+    localStorage.removeItem('user');
+    this.setState({authUser:null});
+  }
+
   render() {
     const { location } = this.props;
     return (
       <div>
         {
           location.pathname !== '/login' && location.pathname !== '/signup' &&
-          <Navbar authUser={this.state.authUser} />
+          <Navbar authUser={this.state.authUser} removeAuthUser={this.removeAuthUser} />
         }
         <Route exact path="/"
           render={props => (<Welcome
