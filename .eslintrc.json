@@ -12,6 +12,7 @@
     "globals": {
         "localStorage": true,
         "document": true,
-        "FormData":true
+        "FormData":true,
+        "window":true
     }
 }
