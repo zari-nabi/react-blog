@@ -1,4 +1,5 @@
 import React from 'react';
+
 import Article from './Article';
 
 class SingleArticleContainer extends React.Component {

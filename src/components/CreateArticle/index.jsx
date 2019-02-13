@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {EditorState,convertToRaw} from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
 
 import CreateArticleForm from './CreateArticleForm';
 
@@ -10,7 +12,7 @@ class CreateArticle extends React.Component {
     this.state = {
       title: '',
       image: null,
-      content: '',
+      content: EditorState.createEmpty(),
       category: null,
       errors: [],
       categories: [],
@@ -46,6 +48,10 @@ class CreateArticle extends React.Component {
 
   }
 
+  handleEditorState = (editorState) =>{
+    this.setState({content : editorState});
+  }
+
   handleInputChange = (event) => {
 //    console.log(event.target.files)
     this.setState({
@@ -57,7 +63,12 @@ class CreateArticle extends React.Component {
     event.preventDefault();
 
     try{
-      const article= await this.props.createArticle(this.state , this.props.token);
+      const article= await this.props.createArticle({
+        title:this.state.title,
+        content:draftToHtml(convertToRaw(this.state.content.getCurrentContent())),
+        image:this.state.image,
+        category:this.state.category,
+      } , this.props.token);
       this.props.history.push('/');
       this.props.notyService.success('Successfully Create Article !');
     }catch(errors){
@@ -68,7 +79,12 @@ class CreateArticle extends React.Component {
   updateArticle = async (event) =>{
     event.preventDefault();
     try{
-      await this.props.updateArticle(this.state,this.state.article,this.props.token);
+      await this.props.updateArticle({
+        title:this.state.title,
+        content:draftToHtml(convertToRaw(this.state.content.getCurrentContent())),
+        image:this.state.image,
+        category:this.state.category,
+      },this.state.article,this.props.token);
 
       this.props.history.push("/user/articles");
       this.props.notyService.success('Successfully Update Article !');
@@ -91,6 +107,7 @@ class CreateArticle extends React.Component {
         content={this.state.content}
         category={this.state.category}
         updateArticle={this.updateArticle}
+        handleEditorState={this.handleEditorState}
       />
     )
   }

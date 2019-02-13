@@ -1,4 +1,5 @@
 import React from 'react';
+import renderHtml from 'react-render-html';
 
 const Article = ({article}) => (
     <div>
@@ -40,7 +41,7 @@ const Article = ({article}) => (
           <div className="container">
             <div className="row">
               <div className="col-12 col-lg-8 offset-lg-2">
-                {article.content}
+                {renderHtml(article.content)}
               </div>
             </div>
           </div>
